@@ -1,13 +1,74 @@
 # DOCKER-VERSION 1.9.1
-FROM kennyballou/docker-erlang-dev
+FROM alpine:3.3
 MAINTAINER kballou@devnulllabs.io
 
-RUN apk del \
-    autoconf \
-    gcc \
-    m4 \
-    make \
-    musl-dev \
-    ncurses-dev \
-    openssl-dev \
-    tar
+ENV LANG="en_US.UTF-8"
+ENV OTP_VER=18.3.2
+ENV REBAR_VERSION="2.6.1"
+ENV REBAR3_VERSION="3.1.0"
+
+RUN apk update \
+    && apk add \
+       autoconf \
+       bash \
+       curl \
+       gcc \
+       libedit \
+       m4 \
+       make \
+       musl-dev \
+       ncurses-dev \
+       ncurses-libs \
+       ncurses-terminfo \
+       ncurses-terminfo-base \
+       openssl-dev \
+       openssl \
+       perl \
+       tar \
+       unixodbc-dev \
+    && OTP_SRC_URL="https://github.com/erlang/otp/archive/OTP-$OTP_VER.tar.gz" \
+    && curl -fSL "$OTP_SRC_URL" -o otp-src.tar.gz \
+    && mkdir -p /usr/src/otp-src \
+    && tar -zxf otp-src.tar.gz -C /usr/src/otp-src --strip-components=1 \
+    && rm otp-src.tar.gz \
+    && cd /usr/src/otp-src \
+    && ./otp_build autoconf \
+    && ./configure \
+    && make -j 4 \
+    && make install \
+    && find /usr/local -name examples | xargs rm -rf \
+    && cd /usr/src \
+    && rm -rf /usr/src/otp-src \
+    && REBAR_SRC_URL="https://github.com/rebar/rebar/archive/${REBAR_VERSION##*@}.tar.gz" \
+    && mkdir -p /usr/src/rebar-src \
+    && curl -fSL "$REBAR_SRC_URL" -o rebar-src.tar.gz \
+    && tar -zxf rebar-src.tar.gz -C /usr/src/rebar-src --strip-components=1 \
+    && rm rebar-src.tar.gz \
+    && cd /usr/src/rebar-src \
+    && ./bootstrap \
+    && install -v ./rebar /usr/local/bin \
+    && cd /usr/src \
+    && rm -rf /usr/src/rebar-src \
+    && REBAR3_SRC_URL="https://github.com/erlang/rebar3/archive/${REBAR3_VERSION##*@}.tar.gz" \
+    && mkdir -p /usr/src/rebar3-src \
+    && curl -fSL "$REBAR3_SRC_URL" -o rebar3-src.tar.gz \
+    && tar -zxf rebar3-src.tar.gz -C /usr/src/rebar3-src --strip-components=1 \
+    && rm rebar3-src.tar.gz \
+    && cd /usr/src/rebar3-src \
+    && HOME=$PWD ./bootstrap \
+    && install -v ./rebar3 /usr/local/bin \
+    && rm -rf /usr/src/rebar3-src \
+    && apk del \
+       autoconf \
+       bash \
+       curl \
+       gcc \
+       m4 \
+       make \
+       musl-dev \
+       ncurses-dev \
+       openssl-dev \
+       tar \
+       unixodbc-dev
+
+CMD ["erl"]
