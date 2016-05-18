@@ -27,7 +27,9 @@ RUN apk update \
        tar \
        unixodbc-dev \
     && OTP_SRC_URL="https://github.com/erlang/otp/archive/OTP-$OTP_VER.tar.gz" \
+    && OTP_SRC_SUM="a30dde83df521626590fdba50db4be25b906d3839072db4448e4a04c04613c2e" \
     && curl -fSL "$OTP_SRC_URL" -o otp-src.tar.gz \
+    && echo "${OTP_SRC_SUM}  otp-src.tar.gz" | sha256sum -c - \
     && mkdir -p /usr/src/otp-src \
     && tar -zxf otp-src.tar.gz -C /usr/src/otp-src --strip-components=1 \
     && rm otp-src.tar.gz \
@@ -40,8 +42,10 @@ RUN apk update \
     && cd /usr/src \
     && rm -rf /usr/src/otp-src \
     && REBAR_SRC_URL="https://github.com/rebar/rebar/archive/${REBAR_VERSION##*@}.tar.gz" \
+    && REBAR_SRC_SUM="aed933d4e60c4f11e0771ccdb4434cccdb9a71cf8b1363d17aaf863988b3ff60" \
     && mkdir -p /usr/src/rebar-src \
     && curl -fSL "$REBAR_SRC_URL" -o rebar-src.tar.gz \
+    && echo "${REBAR_SRC_SUM}  rebar-src.tar.gz" | sha256sum -c - \
     && tar -zxf rebar-src.tar.gz -C /usr/src/rebar-src --strip-components=1 \
     && rm rebar-src.tar.gz \
     && cd /usr/src/rebar-src \
@@ -50,8 +54,10 @@ RUN apk update \
     && cd /usr/src \
     && rm -rf /usr/src/rebar-src \
     && REBAR3_SRC_URL="https://github.com/erlang/rebar3/archive/${REBAR3_VERSION##*@}.tar.gz" \
+    && REBAR3_SRC_SUM="b426cf7829d5df0d6d3e50cd501a1688bdbc878b0ca69d63240a0614afbd9c64" \
     && mkdir -p /usr/src/rebar3-src \
     && curl -fSL "$REBAR3_SRC_URL" -o rebar3-src.tar.gz \
+    && echo "${REBAR3_SRC_SUM}  rebar3-src.tar.gz" | sha256sum -c - \
     && tar -zxf rebar3-src.tar.gz -C /usr/src/rebar3-src --strip-components=1 \
     && rm rebar3-src.tar.gz \
     && cd /usr/src/rebar3-src \
