@@ -3,7 +3,7 @@ FROM alpine:3.3
 MAINTAINER kballou@devnulllabs.io
 
 ENV LANG="en_US.UTF-8"
-ENV OTP_VER="18.3.2"
+ENV OTP_VER="18.3.3"
 ENV REBAR_VERSION="2.6.1"
 ENV REBAR3_VERSION="3.1.0"
 
@@ -27,7 +27,7 @@ RUN apk update \
        tar \
        unixodbc-dev \
     && OTP_SRC_URL="https://github.com/erlang/otp/archive/OTP-$OTP_VER.tar.gz" \
-    && OTP_SRC_SUM="a30dde83df521626590fdba50db4be25b906d3839072db4448e4a04c04613c2e" \
+    && OTP_SRC_SUM="70d50dd5970379cf0cd818bc5e21a1a809b9976c9ddd3a3b8ebde1e1c95ab8c3" \
     && curl -fSL "$OTP_SRC_URL" -o otp-src.tar.gz \
     && echo "${OTP_SRC_SUM}  otp-src.tar.gz" | sha256sum -c - \
     && mkdir -p /usr/src/otp-src \
