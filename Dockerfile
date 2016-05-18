@@ -3,7 +3,7 @@ FROM alpine:3.3
 MAINTAINER kballou@devnulllabs.io
 
 ENV LANG="en_US.UTF-8"
-ENV OTP_VER=18.3.2
+ENV OTP_VER="18.3.2"
 ENV REBAR_VERSION="2.6.1"
 ENV REBAR3_VERSION="3.1.0"
 
