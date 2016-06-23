@@ -1,5 +1,5 @@
 # DOCKER-VERSION 1.9.1
-FROM alpine:3.3
+FROM alpine:3.4
 MAINTAINER kballou@devnulllabs.io
 
 ENV LANG="en_US.UTF-8"
